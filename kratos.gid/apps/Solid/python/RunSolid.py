@@ -2,7 +2,6 @@ import KratosMultiphysics
 import KratosMultiphysics.ExternalSolversApplication
 import KratosMultiphysics.SolidMechanicsApplication
 import KratosMultiphysics.ConstitutiveModelsApplication
-import KratosMultiphysics.SolidMechanicsApplication.MainSolid as MainSolid
+import KratosMultiphysics.SolidMechanicsApplication.solid_analysis as solid_analysis
 
-MainSolid.Solution(KratosMultiphysics.Model()).Run()
-
+solid_analysis.Solution(KratosMultiphysics.Model()).Run()
