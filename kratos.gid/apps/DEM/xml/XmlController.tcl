@@ -51,10 +51,10 @@ proc DEM::xml::CustomTree { args } {
 
 
 proc DEM::xml::InsertConstitutiveLawForParameters {input arguments} {
-    return {<value n='ConstitutiveLaw' pn='Constitutive law' v='' actualize_tree='1' values='[GetConstitutiveLaws]' dict='[GetAllConstitutiveLaws]'  help='Select a constitutive law'>
+    return {<value n='ConstitutiveLaw' pn='Constitutive law' v='' actualize_tree='1' values='[GetConstitutiveLaws]' dict='[GetAllConstitutiveLaws]'  help='Select a constitutive law' show_in_window='0'>
         <dependencies node="../value[@n = 'Material']" actualize='1'/>
         </value>
-        <value n='Material' pn='Material' editable='0' help='Choose a material from the database' values='[get_materials_list_simple]' v='DEM-DefaultMaterial' state='normal' />
+        <value n='Material' pn='Material' editable='0' help='Choose a material from the database' values='[get_materials_list_simple]' v='DEM-DefaultMaterial' state='normal' show_in_window='0' />
     }
 }
 
