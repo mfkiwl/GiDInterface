@@ -130,9 +130,6 @@
     </inputs>
   </Process>
 
-
-
-
   <Process n="DEM-VelocityBC-Process" pn="Impose vector value by direction process" python_module="assign_vector_by_direction_to_condition_process" kratos_module="KratosMultiphysics" help="This process fixes all the components of a given vector variable" check="DirectorVectorNonZero direction">
     <inputs>
       <parameter n="PrescribeMotion_flag" pn="Prescribe motion" type="bool" v="false">
@@ -183,7 +180,6 @@
     </inputs>
   </Process>
 
-
   <Process n="DEM-VelocityIC-Process" pn="Impose vector value by direction process" python_module="assign_vector_by_direction_to_condition_process" kratos_module="KratosMultiphysics" help="This process fixes all the components of a given vector variable" check="DirectorVectorNonZero direction">
     <inputs>
       <parameter n="PrescribeMotion_flag" type="bool" v="false" pn="Prescribe motion" show_in_window="0">
@@ -194,7 +190,6 @@
       </parameter>
     </inputs>
   </Process>
-
 
   <Process n="DEM-Inlet-Process" pn="" python_module="" kratos_module="KratosMultiphysics">
     <inputs>
@@ -265,8 +260,8 @@
         <parameter n="ProbabilityDistribution" parent="true" pn="Probability distribution" type="combo" v="normal" values="normal,lognormal" show_in_window="0"/>
         <parameter n="StandardDeviation" parent="true" pn="Standard deviation" type="double" v="0.0" units="m" unit_magnitude="L" show_in_window="0"/>
 
-        <!-- TO BE FIXED JG!insert material BUT not constitutive law in the tree -->
-        <parameter n="ConstitutiveLaw" special_command="DEM::xml::InsertConstitutiveLawForParameters" args="" pn="" state="hidden"/>
+        <!-- TODO: TO BE FIXED JG!insert material BUT not constitutive law in the tree -->
+        <parameter n="ConstitutiveLaw" special_command="DEM::xml::InsertConstitutiveLawForParameters" args="" pn="" state="hidden"  show_in_window="0"/>
 
         <!-- exclude boundaries functionality seems not be implemented in wkcfdem.tcl -->
         <!-- <parameter id="ExcludeBoundaries" pid="Exclude boundaries" dv="Yes" ivalues="Yes,No" values="Yes,No" help="If active, the nodes on the boundary will not generate elements, only the inner nodes"/> -->
