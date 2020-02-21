@@ -16,6 +16,7 @@
         <Example id="EmbeddedCylinderInFlow3D" app="EmbeddedFluid" logo="EmbeddedCylinderInFlow3D.png" name="Cylinder in flow 3D\nEmbedded" dim="3D" cmd="::EmbeddedFluid::examples::CylinderInFlow"/>
     </Group>
     <Group id="Structural" name="Structural examples">
+        <Example id="HighRiseBuilding" app="Structural" logo="HighRiseBuilding2D.png" name="High Rise Building 2D" dim="2D" cmd="::Structural::examples::HighRiseBuilding"/>
         <Example id="TrussCantilever2D" app="Structural" logo="TrussCantilever2D.png" name="Truss cantilever 2D" dim="2D" cmd="::Structural::examples::TrussCantilever"/>
         <Example id="TrussCantilever3D" app="Structural" logo="TrussCantilever3D.png" name="Truss cantilever 3D" dim="3D" cmd="::Structural::examples::TrussCantilever"/>
     </Group>
