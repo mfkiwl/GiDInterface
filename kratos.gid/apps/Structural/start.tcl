@@ -41,11 +41,11 @@ proc ::Structural::LoadMyFiles { } {
 }
 
 proc ::Structural::CustomToolbarItems { } {
-    # Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::TrussCantilever] [= "Example\nTruss cantilever"]
-    # if {$::Model::SpatialDimension eq "2D"} {
-    #     Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::HighRiseBuilding] [= "Example\nHigh-rise building"]
-    # }
-    # Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::IncompressibleCookMembrane] [= "Example\nIncompressible Cook membrane"]
+    Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::TrussCantilever] [= "Example\nTruss cantilever"]
+    if {$::Model::SpatialDimension eq "2D"} {
+        Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::HighRiseBuilding] [= "Example\nHigh-rise building"]
+    }
+    Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::IncompressibleCookMembrane] [= "Example\nIncompressible Cook membrane"]
     Kratos::ToolbarAddItem "Example" "example.png" [list -np- ::Structural::examples::Membrane] [= "Example\nMembrane"]
 }
 
