@@ -38,7 +38,7 @@ proc Structural::examples::DrawTrussCantileverGeometry {args} {
     lappend structureLines [GiD_Geometry create line append stline $structure_layer 9 5]
     lappend structureLines [GiD_Geometry create line append stline $structure_layer 5 8]
     lappend structureLines [GiD_Geometry create line append stline $structure_layer 8 6]
-    
+
     GiD_Process 'Zoom Frame
 
     # Group creation
@@ -47,18 +47,18 @@ proc Structural::examples::DrawTrussCantileverGeometry {args} {
     GiD_Groups create XZ
     GiD_Groups create Z
     GiD_Groups create Load
-    
+
     GiD_EntitiesGroups assign Structure lines [GiD_EntitiesLayers get $structure_layer lines]
     GiD_EntitiesGroups assign XYZ points 6
     GiD_EntitiesGroups assign XZ points 7
     GiD_EntitiesGroups assign Z points {1 2 3 4 5 8 9 10 11}
     GiD_EntitiesGroups assign Load points {1 2 3 4 5}
-    
+
     GidUtils::UpdateWindow GROUPS
 }
 
 proc Structural::examples::AssignTrussCantileverMeshSizes {args} {
-    GiD_Process Mescape Meshing Structured Lines 1 {*}[GiD_EntitiesGroups get Structure lines] escape escape 
+    GiD_Process Mescape Meshing Structured Lines 1 {*}[GiD_EntitiesGroups get Structure lines] escape escape
 }
 
 
@@ -125,7 +125,7 @@ proc Structural::examples::TreeAssignationTrussCantilever {args} {
     spdAux::SetValuesOnBaseNode $LoadNode $props
 
     # Structure domain time parameters
-    set chanparameterse_list [list EndTime 25.0 DeltaTime 0.1]
+    set parameters [list EndTime 25.0 DeltaTime 0.1]
     set xpath [spdAux::getRoute STTimeParameters]
     spdAux::SetValuesOnBasePath $xpath $parameters
 
