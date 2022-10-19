@@ -31,6 +31,19 @@ proc Kratos::InstallAllPythonDependencies { } {
     ::GidUtils::SetWarnLine "Packages updated"
 }
 
+proc Kratos::InstallAllPythonDependenciesGID { } {
+    package require gid_cross_platform
+    set python_path [Kratos::GetPythonPath]
+    set missing_packages [Kratos::GetMissingPipPackages]
+    if {[llength $missing_packages] > 0} {
+        ::GidUtils::SetWarnLine "Installing pip packages $missing_packages"
+        gid_cross_platform::run_as_administrator $python_path -m pip install --no-cache-dir --disable-pip-version-check {*}$missing_packages
+    }
+    gid_cross_platform::run_as_administrator $python_path -m pip install --upgrade --no-cache-dir --disable-pip-version-check {*}$Kratos::pip_packages_required
+    
+    ::GidUtils::SetWarnLine "Packages updated"
+}
+
 proc Kratos::InstallPip { } {
     W ""
 }
@@ -51,6 +64,18 @@ proc Kratos::GetDefaultPythonPath { } {
     return $pat
 }
 
+#the definitive value to be used
+proc Kratos::GetPythonPath { } {
+    set python_exe_path [Kratos::ManagePreferences GetValue python_path]   
+    if { $python_exe_path == "" } {
+        set python_exe_path [Kratos::GetGiDPythonPath]        
+        if { $python_exe_path == "" } {
+            set python_exe_path [Kratos::GetDefaultPythonPath]
+        }
+    }
+    return $python_exe_path
+}
+
 proc Kratos::pythonVersion {{pythonExecutable "python"}} {
     # Tricky point: Python 2.7 writes version info to stderr!
     set ver 0
@@ -63,13 +88,10 @@ proc Kratos::pythonVersion {{pythonExecutable "python"}} {
     return $ver
 }
 
-proc Kratos::pipVersion { } {
-
-    if { $::tcl_platform(platform) == "windows" } { set os win } {set os unix}
-    if {$os eq "win"} {set pip "pyw"} {set pip "python3"}
+proc Kratos::GetPipVersion { python_exe_path } {
     set ver 0
     catch {
-        set info [exec $pip -m pip --version 2>@1]
+        set info [exec $python_exe_path -m pip --version 2>@1]
         if {[regexp {^pip ([\d.]+)*} $info --> version]} {
             set ver $version
         }
@@ -77,12 +99,13 @@ proc Kratos::pipVersion { } {
     return $ver
 }
 
+
 proc Kratos::GetMissingPipPackages { } {
     variable pip_packages_required
     set missing_packages [list ]
 
-    set py [Kratos::GetPythonExeName]
-    set python_exe_path [Kratos::ManagePreferences GetValue python_path]
+    #set py [Kratos::GetPythonExeName]
+    set python_exe_path [Kratos::GetPythonPath]
     set pip_packages_installed [list ]
     set pip_packages_installed_raw [exec $python_exe_path -m pip list --format=freeze --disable-pip-version-check 2>@1]
     foreach package $pip_packages_installed_raw {
@@ -120,15 +143,15 @@ proc Kratos::ShowErrorsAndActions {errs} {
         }
         "MISSING_PIP" {
             W "Pip is not installed on your system. Please install it by running in a terminal:"
-            set py [Kratos::GetPythonExeName]
-            set python_exe_path [Kratos::ManagePreferences GetValue python_path]
+            #set py [Kratos::GetPythonExeName]
+            set python_exe_path [Kratos::GetPythonPath]
             set install_pip_path [file join $::Kratos::kratos_private(Path) exec get-pip.py]
             W "$python_exe_path $install_pip_path"
         }
         "MISSING_PIP_PACKAGES" {
             W "Kratos package was not found on your system."
-            set py [Kratos::GetPythonExeName]
-            set python_exe_path [Kratos::ManagePreferences GetValue python_path]
+            #set py [Kratos::GetPythonExeName]
+            set python_exe_path [Kratos::GetPythonPath]
             W "Run the following command on a terminal:"
             W "$python_exe_path -m pip install --upgrade --force-reinstall --no-cache-dir $Kratos::pip_packages_required"
         }
@@ -141,16 +164,31 @@ proc Kratos::ShowErrorsAndActions {errs} {
     }
 }
 
+proc Kratos::GetGiDPythonPath { } {
+    #set python_exe_path [file join [gid_filesystem::get_folder_standard scripts] tohil/python/python.bat]
+    if { $::tcl_platform(pointerSize) == 8 } {
+            set bits 64
+    } else {
+            set bits 32
+    }
+    set python_exe_path [file join [gid_filesystem::get_folder_standard scripts] tohil/python/bin/x${bits}/python.exe]
+    if { ![file exists $python_exe_path] } {
+        set python_exe_path ""
+    }
+    return $python_exe_path
+}
+
+
 proc Kratos::CheckDependenciesPipMode {} {
     set ret 0
-    set python_exe_path [Kratos::ManagePreferences GetValue python_path]
-    set py [Kratos::GetPythonExeName]
-
+    set python_exe_path [Kratos::GetPythonPath]
+    set pip_version 0    
+    #set py [Kratos::GetPythonExeName]
     set py_version [Kratos::pythonVersion $python_exe_path]
     if {$py_version <= 0} {
         set ret "MISSING_PYTHON"
     } else {
-        set pip_version [Kratos::pipVersion]
+        set pip_version [Kratos::GetPipVersion $python_exe_path]
         if {$pip_version <= 0} {
             set ret "MISSING_PIP"
         } else {
@@ -232,7 +270,7 @@ proc Kratos::ExecuteLaunchByMode {launch_mode} {
         set docker_image [Kratos::ManagePreferences GetValue docker_image]
         set ::env(kratos_docker_image) $docker_image
     } else {
-        set python_exe_path [Kratos::ManagePreferences GetValue python_path]
+        set python_exe_path [Kratos::GetPythonPath]
         set ::env(kratos_python_exe) $python_exe_path
     }
     return $bat_file
